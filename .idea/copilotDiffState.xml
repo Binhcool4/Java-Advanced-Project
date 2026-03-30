@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="/AdminService (snapshot).java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="/AdminService (snapshot).java" />
+              <option name="originalContent" value="package business;&#10;&#10;public class AdminService {&#10;}&#10;" />
+              <option name="updatedContent" value="package business;&#10;&#10;import dao.RoomDAO;&#10;import dao.EquipmentDAO;&#10;import dao.UserDAO;&#10;import dao.impl.RoomDAOImpl;&#10;import dao.impl.EquipmentDAOImpl;&#10;import dao.impl.UserDAOImpl;&#10;import model.Room;&#10;import model.Equipment;&#10;import model.User;&#10;import model.enums.Role;&#10;import util.PasswordHash;&#10;&#10;import java.util.List;&#10;&#10;public class AdminService {&#10;    private RoomDAO roomDAO = new RoomDAOImpl();&#10;    private EquipmentDAO equipmentDAO = new EquipmentDAOImpl();&#10;    private UserDAO userDAO = new UserDAOImpl();&#10;&#10;    // ============== Quản lý Phòng họp ==============&#10;    public boolean addRoom(String name, int capacity) {&#10;        Room room = new Room();&#10;        room.setName(name);&#10;        room.setCapacity(capacity);&#10;        room.setStatus(&quot;AVAILABLE&quot;);&#10;        return roomDAO.insert(room);&#10;    }&#10;&#10;    public List&lt;Room&gt; getAllRooms() {&#10;        return roomDAO.findAll();&#10;    }&#10;&#10;    public boolean updateRoom(int id, String name, int capacity) {&#10;        return roomDAO.update(id, name, capacity);&#10;    }&#10;&#10;    public boolean deleteRoom(int id) {&#10;        return roomDAO.delete(id);&#10;    }&#10;&#10;    // ============== Quản lý Thiết bị ==============&#10;    public boolean updateEquipmentQuantity(int equipmentId, int quantity) {&#10;        return equipmentDAO.updateQuantity(equipmentId, quantity);&#10;    }&#10;&#10;    // ============== Quản lý Người dùng ==============&#10;    public boolean createSupportStaff(String name, String email, String password) {&#10;        User user = new User();&#10;        user.setName(name);&#10;        user.setEmail(email);&#10;        user.setPassword(PasswordHash.hashPassword(password));&#10;        user.setRole(Role.SUPPORT);&#10;        return userDAO.insert(user);&#10;    }&#10;&#10;    public boolean createEmployee(String name, String email, String password) {&#10;        User user = new User();&#10;        user.setName(name);&#10;        user.setEmail(email);&#10;        user.setPassword(PasswordHash.hashPassword(password));&#10;        user.setRole(Role.EMPLOYEE);&#10;        return userDAO.insert(user);&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
