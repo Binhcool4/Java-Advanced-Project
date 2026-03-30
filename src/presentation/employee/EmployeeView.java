@@ -227,19 +227,21 @@ public class EmployeeView {
             return;
         }
 
-        System.out.printf("%-5s %-15s %-20s %-20s %-10s%n", "ID", "Phòng", "Bắt đầu", "Kết thúc", "Trạng thái");
-        System.out.println("--------------------------------------------------------------------------------");
+        System.out.printf("%-5s %-15s %-20s %-20s %-10s %-15s%n", "ID", "Phòng", "Bắt đầu", "Kết thúc", "Trạng thái", "Chuẩn bị");
+        System.out.println("--------------------------------------------------------------------------------------------");
         for (Booking booking : bookings) {
             Room room = bookingService.getAvailableRooms().stream()
                     .filter(r -> r.getId() == booking.getRoomId())
                     .findFirst().orElse(null);
             String roomName = room != null ? room.getName() : "Unknown";
-            System.out.printf("%-5d %-15s %-20s %-20s %-10s%n",
+            String prepStatus = booking.getPreparationStatus() != null ? booking.getPreparationStatus().toString() : "N/A";
+            System.out.printf("%-5d %-15s %-20s %-20s %-10s %-15s%n",
                 booking.getId(),
                 roomName,
                 booking.getStartTime().format(formatter),
                 booking.getEndTime().format(formatter),
-                booking.getStatus()
+                booking.getStatus(),
+                prepStatus
             );
         }
     }

@@ -104,4 +104,45 @@ public class BookingService {
     public List<Equipment> getAllEquipment() {
         return equipmentDAO.findAll();
     }
+
+    /**
+     * Approve booking and assign support staff
+     */
+    public boolean approveBooking(int bookingId, int supportStaffId) {
+        // Update status to APPROVED and assign support staff, set preparation to PREPARING
+        boolean statusUpdated = bookingDAO.updateStatus(bookingId, "APPROVED");
+        boolean staffAssigned = bookingDAO.updateSupportStaff(bookingId, supportStaffId);
+        boolean prepSet = bookingDAO.updatePreparationStatus(bookingId, "PREPARING");
+        return statusUpdated && staffAssigned && prepSet;
+    }
+
+    /**
+     * Reject booking
+     */
+    public boolean rejectBooking(int bookingId) {
+        return bookingDAO.updateStatus(bookingId, "REJECTED");
+    }
+
+    /**
+     * Update preparation status
+     */
+    public boolean updatePreparationStatus(int bookingId, String status) {
+        return bookingDAO.updatePreparationStatus(bookingId, status);
+    }
+
+    /**
+     * Get bookings assigned to support staff
+     */
+    public List<Booking> getBookingsBySupportStaff(int supportStaffId) {
+        return bookingDAO.findBySupportStaffId(supportStaffId);
+    }
+
+    /**
+     * Get pending bookings for admin approval
+     */
+    public List<Booking> getPendingBookings() {
+        return bookingDAO.findAll().stream()
+                .filter(b -> b.getStatus() == BookingStatus.PENDING)
+                .toList();
+    }
 }

@@ -1,8 +1,12 @@
 package presentation.admin;
 
 import business.AdminService;
+import business.BookingService;
+import business.UserService;
+import model.Booking;
 import model.Room;
 import model.Equipment;
+import model.User;
 import util.InputUtil;
 
 import java.util.List;
@@ -10,6 +14,8 @@ import java.util.Scanner;
 
 public class AdminView {
     private final AdminService adminService = new AdminService();
+    private final BookingService bookingService = new BookingService();
+    private final UserService userService = new UserService();
     private final Scanner sc = new Scanner(System.in);
 
     public void showMenu() {
@@ -18,6 +24,7 @@ public class AdminView {
             System.out.println("1. Quản lý Phòng họp");
             System.out.println("2. Quản lý Thiết bị");
             System.out.println("3. Quản lý Người dùng");
+            System.out.println("4. Quản lý Đặt phòng");
             System.out.println("0. Đăng xuất");
             System.out.print("Chọn: ");
 
@@ -32,6 +39,9 @@ public class AdminView {
                     break;
                 case 3:
                     userManagement();
+                    break;
+                case 4:
+                    bookingManagement();
                     break;
                 case 0:
                     System.out.println("Đã đăng xuất!");
@@ -251,6 +261,83 @@ public class AdminView {
             System.out.println("✓ Tạo tài khoản Employee thành công!");
         } else {
             System.out.println("❌ Tạo tài khoản thất bại!");
+        }
+    }
+
+    private void bookingManagement() {
+        while (true) {
+            System.out.println("\n--- Quản lý Đặt phòng ---");
+            System.out.println("1. Xem yêu cầu đặt phòng");
+            System.out.println("2. Phê duyệt yêu cầu");
+            System.out.println("3. Từ chối yêu cầu");
+            System.out.println("0. Quay lại");
+            System.out.print("Chọn: ");
+
+            int choice = InputUtil.getInt();
+
+            switch (choice) {
+                case 1:
+                    viewPendingBookings();
+                    break;
+                case 2:
+                    approveBooking();
+                    break;
+                case 3:
+                    rejectBooking();
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ!");
+            }
+        }
+    }
+
+    private void viewPendingBookings() {
+        List<Booking> bookings = bookingService.getPendingBookings();
+        if (bookings == null || bookings.isEmpty()) {
+            System.out.println("Không có yêu cầu đặt phòng nào!");
+            return;
+        }
+        System.out.println("\n--- Danh sách Yêu cầu Đặt phòng ---");
+        for (Booking booking : bookings) {
+            System.out.printf("ID: %d | Người đặt: %d | Phòng: %d | Thời gian: %s - %s%n",
+                    booking.getId(), booking.getUserId(), booking.getRoomId(), booking.getStartTime(), booking.getEndTime());
+        }
+    }
+
+    private void approveBooking() {
+        System.out.print("ID yêu cầu cần phê duyệt: ");
+        int bookingId = InputUtil.getInt();
+
+        // List support staff
+        List<User> supportStaff = userService.getSupportStaff();
+        if (supportStaff.isEmpty()) {
+            System.out.println("Không có Support Staff nào!");
+            return;
+        }
+        System.out.println("Danh sách Support Staff:");
+        for (User staff : supportStaff) {
+            System.out.printf("ID: %d | Tên: %s%n", staff.getId(), staff.getName());
+        }
+        System.out.print("Chọn ID Support Staff: ");
+        int staffId = InputUtil.getInt();
+
+        if (bookingService.approveBooking(bookingId, staffId)) {
+            System.out.println("Phê duyệt thành công!");
+        } else {
+            System.out.println("Phê duyệt thất bại!");
+        }
+    }
+
+    private void rejectBooking() {
+        System.out.print("ID yêu cầu cần từ chối: ");
+        int bookingId = InputUtil.getInt();
+
+        if (bookingService.rejectBooking(bookingId)) {
+            System.out.println("Từ chối thành công!");
+        } else {
+            System.out.println("Từ chối thất bại!");
         }
     }
 }

@@ -11,4 +11,7 @@ public interface BookingDAO {
     List<Booking> findAll();
     boolean updateStatus(int id, String status);
     boolean isRoomAvailable(int roomId, java.time.LocalDateTime start, java.time.LocalDateTime end);
+    boolean updateSupportStaff(int bookingId, Integer supportStaffId);
+    boolean updatePreparationStatus(int bookingId, String preparationStatus);
+    List<Booking> findBySupportStaffId(int supportStaffId);
 }

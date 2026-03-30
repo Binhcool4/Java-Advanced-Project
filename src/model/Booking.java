@@ -1,6 +1,7 @@
 package model;
 
 import model.enums.BookingStatus;
+import model.enums.PreparationStatus;
 import java.time.LocalDateTime;
 
 public class Booking {
@@ -10,6 +11,8 @@ public class Booking {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private BookingStatus status;
+    private Integer supportStaffId; // Nullable
+    private PreparationStatus preparationStatus;
 
     public Booking() {}
 
@@ -60,5 +63,21 @@ public class Booking {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+
+    public Integer getSupportStaffId() {
+        return supportStaffId;
+    }
+
+    public void setSupportStaffId(Integer supportStaffId) {
+        this.supportStaffId = supportStaffId;
+    }
+
+    public PreparationStatus getPreparationStatus() {
+        return preparationStatus;
+    }
+
+    public void setPreparationStatus(PreparationStatus preparationStatus) {
+        this.preparationStatus = preparationStatus;
     }
 }

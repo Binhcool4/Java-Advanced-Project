@@ -6,6 +6,8 @@ import model.enums.Role;
 import util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -84,5 +86,29 @@ public class UserDAOImpl implements UserDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<User> findByRole(String role) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE role = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, role);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User u = new User();
+                u.setId(rs.getInt("id"));
+                u.setName(rs.getString("name"));
+                u.setEmail(rs.getString("email"));
+                u.setPhone(rs.getString("phone"));
+                u.setPassword(rs.getString("password"));
+                u.setRole(Role.valueOf(rs.getString("role")));
+                users.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }

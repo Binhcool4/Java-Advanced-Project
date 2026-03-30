@@ -5,6 +5,7 @@ import dao.impl.UserDAOImpl;
 import model.User;
 import model.enums.Role;
 import util.PasswordHash;
+import java.util.List;
 
 public class UserService {
 
@@ -18,5 +19,9 @@ public class UserService {
         user.setRole(Role.SUPPORT);
 
         return userDAO.insert(user);
+    }
+
+    public List<User> getSupportStaff() {
+        return userDAO.findByRole("SUPPORT");
     }
 }
