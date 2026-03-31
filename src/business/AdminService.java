@@ -32,6 +32,10 @@ public class AdminService {
         return roomDAO.findAll();
     }
 
+    public List<Room> searchRoomsByName(String name) {
+        return roomDAO.searchByName(name);
+    }
+
     public boolean updateRoom(int id, String name, int capacity) {
         return roomDAO.update(id, name, capacity);
     }
@@ -52,8 +56,16 @@ public class AdminService {
         return equipmentDAO.findAll();
     }
 
+    public List<Equipment> searchEquipmentsByName(String name) {
+        return equipmentDAO.searchByName(name);
+    }
+
     public boolean updateEquipmentQuantity(int equipmentId, int quantity) {
         return equipmentDAO.updateQuantity(equipmentId, quantity);
+    }
+
+    public boolean deleteEquipment(int id) {
+        return equipmentDAO.delete(id);
     }
 
     // ============== Quản lý Người dùng ==============
@@ -75,5 +87,17 @@ public class AdminService {
         user.setPassword(PasswordHash.hashPassword(password));
         user.setRole(Role.EMPLOYEE);
         return userDAO.insert(user);
+    }
+
+    // ============== Hồ sơ cá nhân ==============
+    public boolean updateAdminProfile(int userId, String name, String email, String phone) {
+        User user = userDAO.findById(userId);
+        if (user == null) {
+            return false;
+        }
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhone(phone);
+        return userDAO.update(user);
     }
 }

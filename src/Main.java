@@ -20,7 +20,7 @@ public class Main {
 
         if (user != null && user.getRole() == Role.ADMIN) {
             AdminView adminView = new AdminView();
-            adminView.showMenu();
+            adminView.showMenu(user);
         } else if (user != null && user.getRole() == Role.EMPLOYEE) {
             EmployeeView employeeView = new EmployeeView();
             employeeView.showMenu(user);

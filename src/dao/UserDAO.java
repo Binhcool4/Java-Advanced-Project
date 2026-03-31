@@ -8,4 +8,6 @@ public interface UserDAO {
     User findByEmailAndPassword(String email, String password);
     User findByEmail(String email);
     List<User> findByRole(String role);
+    User findById(int id);
+    boolean update(User user);
 }

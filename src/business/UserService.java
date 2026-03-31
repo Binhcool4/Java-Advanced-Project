@@ -24,4 +24,15 @@ public class UserService {
     public List<User> getSupportStaff() {
         return userDAO.findByRole("SUPPORT");
     }
+
+    public boolean updateUser(int userId, String name, String email, String phone) {
+        User user = userDAO.findById(userId);
+        if (user == null) {
+            return false;
+        }
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhone(phone);
+        return userDAO.update(user);
+    }
 }

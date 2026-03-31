@@ -46,6 +46,28 @@ public class RoomDAOImpl implements RoomDAO {
     }
 
     @Override
+    public List<Room> searchByName(String name) {
+        List<Room> rooms = new ArrayList<>();
+        String sql = "SELECT * FROM rooms WHERE name LIKE ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Room room = new Room();
+                room.setId(rs.getInt("id"));
+                room.setName(rs.getString("name"));
+                room.setCapacity(rs.getInt("capacity"));
+                room.setStatus(rs.getString("status"));
+                rooms.add(room);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+
+    @Override
     public boolean update(int id, String name, int capacity) {
         String sql = "UPDATE rooms SET name=?, capacity=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();

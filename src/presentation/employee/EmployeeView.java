@@ -119,6 +119,18 @@ public class EmployeeView {
             return;
         }
 
+        // Kiểm tra ngày/giờ không ở quá khứ
+        LocalDateTime now = LocalDateTime.now();
+        if (startTime.isBefore(now)) {
+            System.out.println("Thời gian bắt đầu không được ở quá khứ!");
+            return;
+        }
+
+        if (endTime.isBefore(now)) {
+            System.out.println("Thời gian kết thúc không được ở quá khứ!");
+            return;
+        }
+
         if (!endTime.isAfter(startTime)) {
             System.out.println("Giờ kết thúc phải sau giờ bắt đầu!");
             return;

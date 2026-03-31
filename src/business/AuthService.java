@@ -57,4 +57,36 @@ public class AuthService {
         String hashed = PasswordHash.hashPassword(password);
         return userDAO.findByEmailAndPassword(email, hashed);
     }
+
+    public boolean updateProfile(int userId, String name, String email, String phone) {
+        User user = userDAO.findById(userId);
+        if (user == null) {
+            return false;
+        }
+
+        // Validate
+        if (!ValidationUtil.isValidName(name)) {
+            return false;
+        }
+        if (!ValidationUtil.isValidEmail(email)) {
+            return false;
+        }
+        if (!ValidationUtil.isValidPhone(phone)) {
+            return false;
+        }
+
+        // Check if email changed and already exists
+        if (!user.getEmail().equals(email) && userDAO.findByEmail(email) != null) {
+            return false;
+        }
+
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhone(phone);
+        return userDAO.update(user);
+    }
+
+    public User getUserById(int userId) {
+        return userDAO.findById(userId);
+    }
 }

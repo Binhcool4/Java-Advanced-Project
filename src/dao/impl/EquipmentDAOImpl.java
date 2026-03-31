@@ -34,6 +34,27 @@ public class EquipmentDAOImpl implements EquipmentDAO {
     }
 
     @Override
+    public List<Equipment> searchByName(String name) {
+        List<Equipment> equipments = new ArrayList<>();
+        String sql = "SELECT * FROM equipments WHERE name LIKE ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Equipment equipment = new Equipment();
+                equipment.setId(rs.getInt("id"));
+                equipment.setName(rs.getString("name"));
+                equipment.setQuantity(rs.getInt("quantity"));
+                equipments.add(equipment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return equipments;
+    }
+
+    @Override
     public boolean updateQuantity(int id, int quantity) {
         String sql = "UPDATE equipments SET quantity=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
@@ -54,6 +75,19 @@ public class EquipmentDAOImpl implements EquipmentDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, equipment.getName());
             ps.setInt(2, equipment.getQuantity());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        String sql = "DELETE FROM equipments WHERE id=?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
